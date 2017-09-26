@@ -20,16 +20,9 @@ android {
     versionCode 1
     versionName "1.0"
   }
-  dexOptions {
-    incremental true
-  }
   lintOptions {
     abortOnError false
     warning 'InvalidPackage'
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
   }
 }
 
@@ -38,7 +31,6 @@ repositories {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: '*.jar')
   compile "com.facebook.react:react-native:0.19.+"
   compile "com.google.zxing:core:3.2.1"
   compile "com.drewnoakes:metadata-extractor:2.9.1"
