@@ -634,7 +634,7 @@ public class RCTCameraModule extends ReactContextBaseJavaModule
                 try {
                     //TODO: Changed from ReadableMap to Json parser (removing dependence of react on MutableImage class)
                     ObjectNode j_options = toJsonObject(options);
-                    mutableImage.writeDataToFile(cameraRollFile, j_options, jpegQualityPercent);
+                    mutableImage.writeDataToFile(cameraRollFile, options, jpegQualityPercent);
                 } catch (IOException | NullPointerException e) {
                     promise.reject("failed to save image file", e);
                     return;
@@ -656,7 +656,7 @@ public class RCTCameraModule extends ReactContextBaseJavaModule
                 try {
                     //TODO: Changed from ReadableMap to Json parser (removing dependence of react on MutableImage class)
                     ObjectNode j_options = toJsonObject(options);
-                    mutableImage.writeDataToFile(pictureFile, j_options, 85);
+                    mutableImage.writeDataToFile(pictureFile, options, 85);
                 } catch (IOException e) {
                     promise.reject("failed to save image file", e);
                     return;
@@ -676,7 +676,7 @@ public class RCTCameraModule extends ReactContextBaseJavaModule
                 try {
                     //TODO: Changed from ReadableMap to Json parser (removing dependence of react on MutableImage class)
                     ObjectNode j_options = toJsonObject(options);
-                    mutableImage.writeDataToFile(tempFile, j_options, 85);
+                    mutableImage.writeDataToFile(tempFile, options, 85);
                 } catch (IOException e) {
                     promise.reject("failed to save image file", e);
                     return;
