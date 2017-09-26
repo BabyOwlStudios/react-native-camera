@@ -14,7 +14,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Surface;
 
 import com.facebook.react.bridge.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;

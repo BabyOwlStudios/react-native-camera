@@ -15,15 +15,8 @@ import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMapKeySetIterator;
-import com.facebook.react.bridge.ReadableType;
-import com.fasterxml.jackson.databind.JsonNode;
-
 import com.facebook.react.bridge.ReadableMap;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+
 
 import java.io.*;
 
@@ -147,7 +140,7 @@ public class MutableImage {
     }
 
 
-
+/*
     static ArrayNode toJsonArray(ReadableArray readableArray) {
         JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
         ArrayNode result = nodeFactory.arrayNode();
@@ -178,7 +171,9 @@ public class MutableImage {
         }
         return result;
     }
+*/
 
+    /*
     static ObjectNode toJsonObject(ReadableMap readableMap) {
         JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
         ObjectNode result = nodeFactory.objectNode();
@@ -211,7 +206,7 @@ public class MutableImage {
         }
         return result;
     }
-
+    */
 
 
     /*private static void __writeLocationExifData(JsonNode options, ExifInterface exif) {
