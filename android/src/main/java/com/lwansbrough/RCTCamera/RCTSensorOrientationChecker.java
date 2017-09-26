@@ -17,6 +17,7 @@ interface RCTSensorOrientationListener {
     void orientationEvent();
 }
 
+//TODO: This class is used on RCTCameraModule, but we need to remove this dependence to be able to put pure Java classes on a .jar file
 public class RCTSensorOrientationChecker {
 
     int mOrientation = 0;
@@ -24,7 +25,7 @@ public class RCTSensorOrientationChecker {
     private SensorManager mSensorManager;
     private RCTSensorOrientationListener mListener = null;
 
-    public RCTSensorOrientationChecker( ReactApplicationContext reactContext) {
+    public RCTSensorOrientationChecker(ReactApplicationContext reactContext) {
         mSensorEventListener = new Listener();
         mSensorManager = (SensorManager) reactContext.getSystemService(Context.SENSOR_SERVICE);
 
@@ -51,13 +52,13 @@ public class RCTSensorOrientationChecker {
             float x = event.values[0];
             float y = event.values[1];
 
-            if (x<5 && x>-5 && y > 5)
+            if (x < 5 && x > -5 && y > 5)
                 mOrientation = Surface.ROTATION_0; // portrait
-            else if (x<-5 && y<5 && y>-5)
+            else if (x < -5 && y < 5 && y > -5)
                 mOrientation = Surface.ROTATION_270; // right
-            else if (x<5 && x>-5 && y<-5)
+            else if (x < 5 && x > -5 && y < -5)
                 mOrientation = Surface.ROTATION_180; // upside down
-            else if (x>5 && y<5 && y>-5)
+            else if (x > 5 && y < 5 && y > -5)
                 mOrientation = Surface.ROTATION_90; // left
 
             if (mListener != null) {

@@ -5,23 +5,13 @@
 package com.lwansbrough.RCTCamera;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.view.MotionEvent;
 import android.view.TextureView;
-import android.os.AsyncTask;
-
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.EnumMap;
-import java.util.EnumSet;
 
 class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceTextureListener, Camera.PreviewCallback {
     private int _cameraType;
@@ -131,8 +121,8 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
                 _camera = RCTCamera.getInstance().acquireCameraInstance(_cameraType);
                 Camera.Parameters parameters = _camera.getParameters();
 
-                final boolean isCaptureModeStill = (_captureMode == RCTCameraModule.RCT_CAMERA_CAPTURE_MODE_STILL);
-                final boolean isCaptureModeVideo = (_captureMode == RCTCameraModule.RCT_CAMERA_CAPTURE_MODE_VIDEO);
+                final boolean isCaptureModeStill = (_captureMode == RCTCameraUtils.RCT_CAMERA_CAPTURE_MODE_STILL);
+                final boolean isCaptureModeVideo = (_captureMode == RCTCameraUtils.RCT_CAMERA_CAPTURE_MODE_VIDEO);
                 if (!isCaptureModeStill && !isCaptureModeVideo) {
                     throw new RuntimeException("Unsupported capture mode:" + _captureMode);
                 }
@@ -245,7 +235,7 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
 
     /**
      * Handles setting focus to the location of the event.
-     *
+     * <p>
      * Note that this will override the focus mode on the camera to FOCUS_MODE_AUTO if available,
      * even if this was previously something else (such as FOCUS_MODE_CONTINUOUS_*; see also
      * {@link #startCamera()}. However, this makes sense - after the user has initiated any
@@ -305,7 +295,9 @@ class RCTCameraViewFinder extends TextureView implements TextureView.SurfaceText
         }
     }
 
-    /** Determine the space between the first two fingers */
+    /**
+     * Determine the space between the first two fingers
+     */
     private float getFingerSpacing(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);

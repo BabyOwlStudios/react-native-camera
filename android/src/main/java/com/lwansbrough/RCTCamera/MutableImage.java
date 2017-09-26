@@ -14,14 +14,23 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
-import com.facebook.react.bridge.ReadableMap;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.JsonNode;
+
+/*
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import com.facebook.react.bridge.ReadableMap;
+*/
+
+
+import java.io.*;
 
 public class MutableImage {
     private static final String TAG = "RNCamera";
@@ -66,7 +75,7 @@ public class MutableImage {
                 return;
             } else if (exifIFD0Directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
                 int exifOrientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
-                if(exifOrientation != 1) {
+                if (exifOrientation != 1) {
                     rotate(exifOrientation);
                     exifIFD0Directory.setInt(ExifIFD0Directory.TAG_ORIENTATION, 1);
                 }
@@ -142,7 +151,185 @@ public class MutableImage {
         return Base64.encodeToString(toJpeg(currentRepresentation, jpegQualityPercent), Base64.DEFAULT);
     }
 
+
+/*
+    static ArrayNode toJsonArray(ReadableArray readableArray) {
+        JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
+        ArrayNode result = nodeFactory.arrayNode();
+        for (int i = 0; i < readableArray.size(); i++) {
+            ReadableType indexType = readableArray.getType(i);
+            switch (indexType) {
+                case Null:
+                    result.addNull();
+                    break;
+                case Boolean:
+                    result.add(readableArray.getBoolean(i));
+                    break;
+                case Number:
+                    result.add(readableArray.getDouble(i));
+                    break;
+                case String:
+                    result.add(readableArray.getString(i));
+                    break;
+                case Map:
+                    result.add(toJsonObject(readableArray.getMap(i)));
+                    break;
+                case Array:
+                    result.add(toJsonArray(readableArray.getArray(i)));
+                    break;
+                default:
+                    Log.e(TAG, "Could not convert object at index " + i + ".");
+            }
+        }
+        return result;
+    }
+
+    static ObjectNode toJsonObject(ReadableMap readableMap) {
+        JsonNodeFactory nodeFactory = JsonNodeFactory.instance;
+        ObjectNode result = nodeFactory.objectNode();
+        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+        while (iterator.hasNextKey()) {
+            String key = iterator.nextKey();
+            ReadableType type = readableMap.getType(key);
+            switch (type) {
+                case Null:
+                    result.putNull(key);
+                    break;
+                case Boolean:
+                    result.put(key, readableMap.getBoolean(key));
+                    break;
+                case Number:
+                    result.put(key, readableMap.getDouble(key));
+                    break;
+                case String:
+                    result.put(key, readableMap.getString(key));
+                    break;
+                case Map:
+                    result.set(key, toJsonObject(readableMap.getMap(key)));
+                    break;
+                case Array:
+                    result.set(key, toJsonArray(readableMap.getArray(key)));
+                    break;
+                default:
+                    Log.e(TAG, "Could not convert object with key: " + key + ".");
+            }
+        }
+        return result;
+    }
+*/
+
+
+
+   /* private static void __writeLocationExifData(JsonNode options, ExifInterface exif) {
+        if (!options.has("metadata"))
+            return;
+
+        JsonNode metadata = options.get("metadata");
+        if (!metadata.has("location"))
+            return;
+
+        JsonNode location = metadata.get("location");
+        if (!location.has("coords"))
+            return;
+
+        try {
+            JsonNode coords = location.get("coords");
+            double latitude = coords.get("latitude").asDouble();
+            double longitude = coords.get("longitude").asDouble();
+
+            GPS.writeExifData(latitude, longitude, exif);
+        } catch (IOException e) {
+            Log.e(TAG, "Couldn't write location data", e);
+        }
+    }
+
+    private void writeLocationExifData(ReadableMap options, ExifInterface exif) {
+
+        ObjectNode j_options = toJsonObject(options);
+
+        __writeLocationExifData(j_options, exif);
+    } */
+
+
+
+    /*private static void __writeDataToFile(File file, JsonNode options, int jpegQualityPercent, MutableImage context) throws IOException {
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(toJpeg(context.currentRepresentation, jpegQualityPercent));
+        fos.close();
+
+        try {
+            ExifInterface exif = new ExifInterface(file.getAbsolutePath());
+
+            // copy original exif data to the output exif...
+            // unfortunately, this Android ExifInterface class doesn't understand all the tags so we lose some
+            for (Directory directory : __originalImageMetaData(context.originalImageMetaData, context.originalImageData).getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    int tagType = tag.getTagType();
+                    Object object = directory.getObject(tagType);
+                    exif.setAttribute(tag.getTagName(), object.toString());
+                }
+            }
+
+            __writeLocationExifData(options, exif);
+
+            if (context.hasBeenReoriented)
+                __rewriteOrientation(exif);
+
+            exif.saveAttributes();
+        } catch (ImageProcessingException | IOException e) {
+            Log.e(TAG, "failed to save exif data", e);
+        }
+    }
+
     public void writeDataToFile(File file, ReadableMap options, int jpegQualityPercent) throws IOException {
+
+       ObjectNode j_options = toJsonObject(options);
+
+       __writeDataToFile(file, j_options, jpegQualityPercent, this);
+    }*/
+
+
+
+    /*private static void __rewriteOrientation(ExifInterface exif) {
+        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+    }*/
+
+
+    private void rewriteOrientation(ExifInterface exif) {
+        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
+    }
+
+
+
+
+    /*private static Metadata __originalImageMetaData(Metadata __originalImageMetaData, byte[] __originalImageData) throws ImageProcessingException, IOException {
+        if (__originalImageMetaData == null) {//this is expensive, don't do it more than once
+            __originalImageMetaData = ImageMetadataReader.readMetadata(
+                    new BufferedInputStream(new ByteArrayInputStream(__originalImageData)),
+                    __originalImageData.length
+            );
+        }
+        return __originalImageMetaData;
+    }*/
+
+    private Metadata originalImageMetaData() throws ImageProcessingException, IOException {
+        if (this.originalImageMetaData == null) {//this is expensive, don't do it more than once
+            originalImageMetaData = ImageMetadataReader.readMetadata(
+                    new BufferedInputStream(new ByteArrayInputStream(originalImageData)),
+                    originalImageData.length
+            );
+        }
+        return originalImageMetaData;
+    }
+
+
+
+
+
+
+
+
+    public void writeDataToFile(File file, JsonNode options, int jpegQualityPercent) throws IOException {
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(toJpeg(currentRepresentation, jpegQualityPercent));
         fos.close();
@@ -152,7 +339,7 @@ public class MutableImage {
 
             // copy original exif data to the output exif...
             // unfortunately, this Android ExifInterface class doesn't understand all the tags so we lose some
-            for (Directory directory : originalImageMetaData().getDirectories()) {
+            for (Directory directory :originalImageMetaData().getDirectories()) {
                 for (Tag tag : directory.getTags()) {
                     int tagType = tag.getTagType();
                     Object object = directory.getObject(tagType);
@@ -162,35 +349,31 @@ public class MutableImage {
 
             writeLocationExifData(options, exif);
 
-            if(hasBeenReoriented)
+            if (hasBeenReoriented)
                 rewriteOrientation(exif);
 
             exif.saveAttributes();
-        } catch (ImageProcessingException  | IOException e) {
+        } catch (ImageProcessingException | IOException e) {
             Log.e(TAG, "failed to save exif data", e);
         }
     }
 
-    private void rewriteOrientation(ExifInterface exif) {
-        exif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_NORMAL));
-    }
-
-    private void writeLocationExifData(ReadableMap options, ExifInterface exif) {
-        if(!options.hasKey("metadata"))
+    private void writeLocationExifData(JsonNode options, ExifInterface exif) {
+        if (!options.has("metadata"))
             return;
 
-        ReadableMap metadata = options.getMap("metadata");
-        if (!metadata.hasKey("location"))
+        JsonNode metadata = options.get("metadata");
+        if (!metadata.has("location"))
             return;
 
-        ReadableMap location = metadata.getMap("location");
-        if(!location.hasKey("coords"))
+        JsonNode location = metadata.get("location");
+        if (!location.has("coords"))
             return;
 
         try {
-            ReadableMap coords = location.getMap("coords");
-            double latitude = coords.getDouble("latitude");
-            double longitude = coords.getDouble("longitude");
+            JsonNode coords = location.get("coords");
+            double latitude = coords.get("latitude").asDouble();
+            double longitude = coords.get("longitude").asDouble();
 
             GPS.writeExifData(latitude, longitude, exif);
         } catch (IOException e) {
@@ -198,15 +381,12 @@ public class MutableImage {
         }
     }
 
-    private Metadata originalImageMetaData() throws ImageProcessingException, IOException {
-        if(this.originalImageMetaData == null) {//this is expensive, don't do it more than once
-            originalImageMetaData = ImageMetadataReader.readMetadata(
-                    new BufferedInputStream(new ByteArrayInputStream(originalImageData)),
-                    originalImageData.length
-            );
-        }
-        return originalImageMetaData;
-    }
+
+
+
+
+
+
 
     private static byte[] toJpeg(Bitmap bitmap, int quality) throws OutOfMemoryError {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -7,19 +7,17 @@ package com.lwansbrough.RCTCamera;
 import android.content.Context;
 import android.hardware.SensorManager;
 import android.view.OrientationEventListener;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View;
-
-import java.util.List;
 
 public class RCTCameraView extends ViewGroup {
     private final OrientationEventListener _orientationListener;
     private final Context _context;
     private RCTCameraViewFinder _viewFinder = null;
     private int _actualDeviceOrientation = -1;
-    private int _aspect = RCTCameraModule.RCT_CAMERA_ASPECT_FIT;
-    private int _captureMode = RCTCameraModule.RCT_CAMERA_CAPTURE_MODE_STILL;
+    private int _aspect = RCTCameraUtils.RCT_CAMERA_ASPECT_FIT;
+    private int _captureMode = RCTCameraUtils.RCT_CAMERA_CAPTURE_MODE_STILL;
     private String _captureQuality = "high";
     private int _torchMode = -1;
     private int _flashMode = -1;
@@ -144,7 +142,7 @@ public class RCTCameraView extends ViewGroup {
         int viewfinderHeight;
         double ratio;
         switch (this._aspect) {
-            case RCTCameraModule.RCT_CAMERA_ASPECT_FIT:
+            case RCTCameraUtils.RCT_CAMERA_ASPECT_FIT:
                 ratio = this._viewFinder.getRatio();
                 if (ratio * height > width) {
                     viewfinderHeight = (int) (width / ratio);
@@ -154,7 +152,7 @@ public class RCTCameraView extends ViewGroup {
                     viewfinderHeight = (int) height;
                 }
                 break;
-            case RCTCameraModule.RCT_CAMERA_ASPECT_FILL:
+            case RCTCameraUtils.RCT_CAMERA_ASPECT_FILL:
                 ratio = this._viewFinder.getRatio();
                 if (ratio * height < width) {
                     viewfinderHeight = (int) (width / ratio);
