@@ -24,6 +24,10 @@ android {
     abortOnError false
     warning 'InvalidPackage'
   }
+  packagingOptions {
+    pickFirst  'META-INF/license.txt'
+  }
+
 }
 
 repositories {
